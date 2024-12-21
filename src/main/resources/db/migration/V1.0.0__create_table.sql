@@ -20,35 +20,35 @@ CREATE TABLE Communication
 );
 
 -- yurt
+CREATE TABLE Dorm_detail
+(
+    id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    detail_text   TEXT NOT NULL,
+    facility_text TEXT NOT NULL
+);
+
+-- yurt ***
 CREATE TABLE Dormitory
 (
     id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    com_id            UUID NOT NULL,
+    com_id            UUID        NOT NULL,
+    dorm_detail_id    UUID        NOT NULL,
     name              varchar(50) NOT NULL,
-    room_capacity     INT  NOT NULL,
-    total_capacity    INT  NOT NULL,
-    number_registered INT  NOT NULL,
-    floor             INT  NOT NULL,
+    room_capacity     INT         NOT NULL,
+    total_capacity    INT         NOT NULL,
+    number_registered INT         NOT NULL,
+    floor             INT         NOT NULL,
     dorm_type         INT CHECK (dorm_type IN (0, 1)), --0: kız / 1: erkek
-    FOREIGN KEY (com_id) REFERENCES Communication (id) ON DELETE CASCADE
+    FOREIGN KEY (com_id) REFERENCES Communication (id) ON DELETE CASCADE,
+    FOREIGN KEY (dorm_detail_id) REFERENCES Dorm_detail (id) ON DELETE CASCADE
 );
 
--- yurt-photo
+-- yurt-detay.sql
 CREATE TABLE Dorm_photo
 (
     id      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     dorm_id UUID NOT NULL,
     photo   BYTEA,
-    FOREIGN KEY (dorm_id) REFERENCES Dormitory (id) ON DELETE CASCADE
-);
-
--- yurt-detay.sql
-CREATE TABLE Dorm_detail
-(
-    id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    dorm_id       UUID NOT NULL,
-    detail_text   TEXT NOT NULL,
-    facility_text JSONB,
     FOREIGN KEY (dorm_id) REFERENCES Dormitory (id) ON DELETE CASCADE
 );
 

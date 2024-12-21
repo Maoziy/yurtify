@@ -58,10 +58,9 @@ public class DormitoryServiceImpl implements DormitoryService {
     public DormitoryDto updateDormitory(UUID id, UpdateDormitory updateDormitory) {
         DormitoryEntity entity = repository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
 
-        DormitoryEntity updated = MAPPER.updateDormitoryToEntity(updateDormitory);
-        updated.setCommunication(entity.getCommunication());
+        MAPPER.updateEntityFromDto(updateDormitory,entity);
 
-        return MAPPER.entityToDto(repository.save(updated));
+        return MAPPER.entityToDto(repository.save(entity));
     }
 
     @Override

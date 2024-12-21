@@ -12,6 +12,7 @@ public class DormitoryDto {
     private Integer numberRegistered;
     private Integer floor;
     private Integer dormType;
+    private DormDetailDto dormDetailDto;
 
     private CommunicationDto communication;
 

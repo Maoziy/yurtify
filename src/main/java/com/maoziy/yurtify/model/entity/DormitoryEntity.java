@@ -32,7 +32,11 @@ public class DormitoryEntity {
     @Column(name = "dorm_type", nullable = false)
     private Integer dormType;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "com_id", referencedColumnName = "id", nullable = false)
     private CommunicationEntity communication;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dorm_detail_id", referencedColumnName = "id", nullable = false)
+    private DormDetailEntity dormDetailEntity;
 }
