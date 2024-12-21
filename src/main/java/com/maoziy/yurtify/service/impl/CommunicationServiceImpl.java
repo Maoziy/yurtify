@@ -1,4 +1,4 @@
-package com.maoziy.yurtify.service;
+package com.maoziy.yurtify.service.impl;
 
 import com.maoziy.yurtify.model.dto.CommunicationDto;
 import com.maoziy.yurtify.model.entity.CityEntity;
@@ -7,6 +7,7 @@ import com.maoziy.yurtify.model.exception.NotFoundException;
 import com.maoziy.yurtify.model.mapper.CommunicationMapper;
 import com.maoziy.yurtify.repository.CityRepository;
 import com.maoziy.yurtify.repository.CommunicationRepository;
+import com.maoziy.yurtify.service.CommunicationService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;

@@ -57,7 +57,7 @@ CREATE TABLE Floor
 (
     id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     dorm_id         UUID NOT NULL,
-    floor_number    TEXT NOT NULL,
+    floor_number    INT  NOT NULL,
     number_of_rooms INT  NOT NULL,
     FOREIGN KEY (dorm_id) REFERENCES Dormitory (id) ON DELETE CASCADE
 );
@@ -94,6 +94,99 @@ CREATE TABLE Student_photo
     photo      BYTEA,
     FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE CASCADE
 );
+
+CREATE
+OR REPLACE FUNCTION create_floors_and_rooms()
+    RETURNS TRIGGER AS $$
+DECLARE
+rooms_per_floor INT;
+    remaining_rooms
+INT;
+    floor_index
+INT;
+    room_index
+INT;
+    current_floor_id
+UUID;
+BEGIN
+    -- Toplam oda sayısını hesapla
+    rooms_per_floor
+:= NEW.total_capacity / NEW.room_capacity;
+    remaining_rooms
+:= NEW.total_capacity % NEW.room_capacity;
+
+    -- Katları ekle
+FOR floor_index IN 1..NEW.floor LOOP
+        INSERT INTO Floor (id, dorm_id, floor_number, number_of_rooms)
+        VALUES (uuid_generate_v4(), NEW.id, floor_index, 0)
+        RETURNING id INTO current_floor_id;
+
+        -- Her katta kaç oda varsa ekle
+FOR room_index IN 1..(rooms_per_floor / NEW.floor) LOOP
+            INSERT INTO Room (id, dorm_id, floor_id, room_name, capacity, number_of_student)
+            VALUES (
+                uuid_generate_v4(),
+                NEW.id,
+                current_floor_id,
+                'Room_' || floor_index || '_' || room_index,
+                NEW.room_capacity,
+                0
+            );
+END LOOP;
+END LOOP;
+
+    -- Kalan odaları dağıt (eşit paylaşma durumu yoksa en alt kata ekle)
+    floor_index
+:= 1;
+    WHILE
+remaining_rooms > 0 LOOP
+UPDATE Floor
+SET number_of_rooms = number_of_rooms + 1
+WHERE dorm_id = NEW.id
+  AND floor_number = floor_index;
+
+INSERT INTO Room (id, dorm_id, floor_id, room_name, capacity, number_of_student)
+VALUES (uuid_generate_v4(),
+        NEW.id,
+        (SELECT id FROM Floor WHERE dorm_id = NEW.id AND floor_number = floor_index),
+        'Room_' || floor_index || '_extra',
+        NEW.room_capacity,
+        0);
+
+remaining_rooms
+:= remaining_rooms - 1;
+        floor_index
+:= floor_index + 1;
+
+        -- Kat sayısına geri dön (dairesel paylaşım için)
+        IF
+floor_index > NEW.floor THEN
+            floor_index := 1;
+END IF;
+END LOOP;
+
+RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_create_floors_and_rooms
+    AFTER INSERT
+    ON Dormitory
+    FOR EACH ROW
+    EXECUTE FUNCTION create_floors_and_rooms();
+
+/*INSERT INTO Dormitory (com_id, dorm_detail_id, name, room_capacity, total_capacity, number_registered, floor, dorm_type)
+VALUES (
+           uuid_generate_v4(), -- Communication ID
+           uuid_generate_v4(), -- Dorm_detail ID
+           'Yurt 1',
+           4,  -- Oda başına maksimum kapasite
+           20, -- Toplam kapasite
+           0,  -- Kayıtlı öğrenci sayısı
+           3,  -- Kat sayısı
+           1   -- Erkek yurdu
+       );*/
 
 -- City Tablosu: Türkiye'deki bazı iller
 INSERT INTO City (name, code)
