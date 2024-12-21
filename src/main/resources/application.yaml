@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: "yurtify"
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: yurtify
+    password: yurtify
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8080
+
