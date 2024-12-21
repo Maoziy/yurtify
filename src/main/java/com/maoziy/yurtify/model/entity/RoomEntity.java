@@ -1,8 +1,10 @@
 package com.maoziy.yurtify.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -10,6 +12,8 @@ import java.util.UUID;
 @Table(name = "Room")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoomEntity {
 
     @Id
@@ -18,9 +22,11 @@ public class RoomEntity {
     private UUID id;
 
     @ManyToOne
+    @JoinColumn(name = "dorm_id", referencedColumnName = "id")
     private DormitoryEntity dormId;
 
-    @ManyToOne
+    @ManyToOne()
+    @JoinColumn(name = "floor_id", referencedColumnName = "id")
     private FloorEntity floorId;
 
     @Column(name = "room_name")
