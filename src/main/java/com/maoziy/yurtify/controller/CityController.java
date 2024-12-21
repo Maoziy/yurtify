@@ -4,6 +4,7 @@ import com.maoziy.yurtify.controller.response.BaseResponse;
 import com.maoziy.yurtify.controller.response.CityResponse;
 import com.maoziy.yurtify.model.mapper.CityMapper;
 import com.maoziy.yurtify.service.CityService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ public class CityController {
     private static final CityMapper cityMapper = Mappers.getMapper(CityMapper.class);
 
 
+    @Operation(summary = "Örnek endpoint", description = "Bu bir örnek endpointtir.")
     @GetMapping
     public BaseResponse<List<CityResponse>> getAll() {
         List<CityResponse> cities = service.getAll().stream().map(cityMapper::mapToResponse).toList();

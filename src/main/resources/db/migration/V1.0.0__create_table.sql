@@ -79,9 +79,9 @@ CREATE TABLE Room
 CREATE TABLE Student
 (
     id      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    room_id UUID NOT NULL,
+    room_id UUID ,
     name    TEXT NOT NULL,
-    phone   INT  NOT NULL,
+    phone   varchar(12)  NOT NULL,
     gender  INT CHECK (gender IN (0, 1)), --0: kız / 1: erkek,
     FOREIGN KEY (room_id) REFERENCES Room (id) ON DELETE CASCADE
 );
