@@ -13,4 +13,6 @@ public interface CommunicationService {
     CommunicationDto createNewCommunication(CommunicationDto communicationDto);
 
     CommunicationDto updateCommunication(UUID id, CommunicationDto communicationDto);
+
+    CommunicationDto getById(UUID id);
 }

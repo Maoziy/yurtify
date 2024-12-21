@@ -12,10 +12,10 @@ CREATE TABLE City
 -- iletisim
 CREATE TABLE Communication
 (
-    id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    city_id     UUID NOT NULL,
-    email       VARCHAR(255),
-    phone       VARCHAR(255),
+    id      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID NOT NULL,
+    email   VARCHAR(255),
+    phone   VARCHAR(255),
     FOREIGN KEY (city_id) REFERENCES City (id) ON DELETE CASCADE
 );
 
@@ -24,10 +24,11 @@ CREATE TABLE Dormitory
 (
     id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     com_id            UUID NOT NULL,
+    name              varchar(50) NOT NULL,
     room_capacity     INT  NOT NULL,
     total_capacity    INT  NOT NULL,
     number_registered INT  NOT NULL,
-    floor             VARCHAR(255),
+    floor             INT  NOT NULL,
     dorm_type         INT CHECK (dorm_type IN (0, 1)), --0: kız / 1: erkek
     FOREIGN KEY (com_id) REFERENCES Communication (id) ON DELETE CASCADE
 );

@@ -42,18 +42,20 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Override
     public CommunicationDto updateCommunication(UUID id, CommunicationDto communicationDto) {
         String cityName = communicationDto.getCity();
+        CityEntity cityEntity = cityRepository.findByName(cityName).orElseThrow(() -> new NotFoundException(cityName));
 
         CommunicationEntity entity = repository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
 
-        if (!entity.getCity().getName().equals(cityName)) {
-            CityEntity cityEntity = cityRepository.findByName(cityName).orElseThrow(() -> new NotFoundException(cityName));
-            entity.setCity(cityEntity);
+        MAPPER.updateEntityFromDto(communicationDto,entity);
+        entity.setCity(cityEntity);
 
-            return MAPPER.entityToDto(repository.save(entity));
-        }
+        return MAPPER.entityToDto(repository.save(entity));
+    }
 
-        CommunicationEntity updatedEntity = MAPPER.dtoToEntity(communicationDto);
+    @Override
+    public CommunicationDto getById(UUID id) {
+        CommunicationEntity entity = repository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
 
-        return MAPPER.entityToDto(repository.save(updatedEntity));
+        return MAPPER.entityToDto(entity);
     }
 }

@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CommonErrors implements BaseError {
 
-    NOT_FOUND_EXCEPTION("Record not founded with %s");
+    NOT_FOUND_EXCEPTION("Record not founded with %s"), ALREADY_EXISTS_ERROR("Record already exists with %s");
 
     private final String message;
 }

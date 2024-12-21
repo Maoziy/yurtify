@@ -30,6 +30,13 @@ public class CommunicationController {
         return BaseResponse.success(cities);
     }
 
+    @GetMapping("/{id}")
+    public BaseResponse<CommunicationDto> getById(@PathVariable UUID id) {
+        CommunicationDto communication = service.getById(id);
+
+        return BaseResponse.success(communication);
+    }
+
     @PostMapping
     public BaseResponse<CommunicationDto> createNewCommunication(@RequestBody CreateCommunicationRequest request) {
         CommunicationDto communicationDto = MAPPER.requestToDto(request);

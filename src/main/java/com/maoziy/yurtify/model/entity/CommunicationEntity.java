@@ -26,4 +26,7 @@ public class CommunicationEntity {
     @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = false) // district_id Foreign Key
     private CityEntity city;
 
+    @OneToOne(mappedBy = "communication",cascade = CascadeType.ALL)
+    private DormitoryEntity dormitoryEntity;
+
 }

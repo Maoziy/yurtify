@@ -1,6 +1,7 @@
 package com.maoziy.yurtify.controller;
 
 import com.maoziy.yurtify.controller.response.BaseResponse;
+import com.maoziy.yurtify.model.exception.AlreadyExistsException;
 import com.maoziy.yurtify.model.exception.BaseException;
 import com.maoziy.yurtify.model.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,13 @@ public class ControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public BaseResponse<String> handleException(BaseException exception) {
+    public BaseResponse<String> handleNotFoundException(BaseException exception) {
+        return BaseResponse.fail(exception.getError(),exception.getMessage());
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> handleAlreadyExistsException(BaseException exception) {
         return BaseResponse.fail(exception.getError(),exception.getMessage());
     }
 }
