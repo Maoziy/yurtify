@@ -68,7 +68,7 @@ CREATE TABLE Room
     id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     dorm_id           UUID NOT NULL,
     floor_id          UUID NOT NULL,
-    room_name         TEXT NOT NULL,
+    room_name         varchar(25) NOT NULL,
     capacity          INT  NOT NULL,
     number_of_student INT  NOT NULL,
     FOREIGN KEY (dorm_id) REFERENCES Dormitory (id) ON DELETE CASCADE,
